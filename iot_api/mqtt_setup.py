@@ -4,7 +4,7 @@ from django.utils import timezone
 from datetime import timedelta
 
 def on_connect(client, userdata, flags, rc):
-    if rc = 0:
+    if rc == 0:
         print("✅ [MQTT] Đã kết nối Mosquitto Broker!")
         client.subscribe("home/sensors/gas")
     else:

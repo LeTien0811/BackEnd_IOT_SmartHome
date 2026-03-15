@@ -15,8 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from iot_api.views import CustomLoginView, DeviceViewSet, SensorLogViewSet, HourlyChartAPIView
+from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework.routers import DefaultRouter
 
+router = DefaultRouter()
+router.register(r'devices', DeviceViewSet, basename='device')
+router.register(r'sensor-logs', SensorLogViewSet, basename='sensorlog')
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # API login born JWT
+    path('api/auth/login/', CustomLoginView.as_view(), name='token_obtain_pair'),
+    # API refresh Token when Access Token expired
+    path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('api/chart/hourly/', HourlyChartAPIView.as_view(), name='chart_hourly'),
+
+    # All API for device will be located last prefix /api/
+    # Ex: GET /api/devices/ (get list device), DELETE /api/devices/1/ (delete)
+    path('api/', include(router.urls)),
 ]

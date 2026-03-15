@@ -113,6 +113,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50, # Mỗi lần App gọi API, Backend chỉ trả về tối đa 50 dòng mới nhất
 }
 
 from datetime import timedelta

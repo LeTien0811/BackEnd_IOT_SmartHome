@@ -20,7 +20,7 @@ class Home(models.Model):
 class HomeMember(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='homes')
     home = models.ForeignKey(Home, on_delete=models.CASCADE, related_name='members')
-    role = models.BooleanField(default=False)
+    role = models.CharField(max_length=12)
     joined_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
