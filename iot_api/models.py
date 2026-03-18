@@ -24,18 +24,27 @@ class HomeMember(models.Model):
     joined_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('member', 'home')  
+        unique_together = ('member', 'home')
+
+class Room(models.Model):
+    room_id = models.AutoField(primary_key=True)
+    home = models.ForeignKey(Home, on_delete=models.CASCADE)
+    room_name = models.CharField(max_length=100) # VD: Phòng khách, Nhà bếp
+
+    def __str__(self):
+        return f"{self.room_name} ({self.home.home_name})"
     
 class Device(models.Model):
     device = models.AutoField(primary_key=True)
-    home = models.ForeignKey(Home, on_delete=models.CASCADE, related_name='devices')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
     device_name = models.CharField(max_length=150)
+    device_type = models.CharField(max_length=150)
     device_status = models.CharField(max_length=20)
     device_is_on = models.BooleanField(default=False) # Đã đổi sang Boolean
     device_date_create = models.DateTimeField(auto_now_add=True)
     device_date_update = models.DateTimeField(auto_now=True)    
     def __str__(self):
-        return f"{self.device_name} - {self.home.home_name}"
+        return f"{self.device_name} - {self.room.home.home_name}"
     
 class SensorLog(models.Model):
     sensor_log = models.AutoField(primary_key=True)

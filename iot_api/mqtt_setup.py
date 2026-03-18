@@ -21,11 +21,11 @@ def on_message(client, userdata, msg):
     try:
         # Bóc tách JSON payload
         payload = json.loads(msg.payload.decode('utf-8'))
-        temp = payload.get("temperature", 0)
-        hum = payload.get("humidity", 0)
-        mq2 = payload.get("mq2_raw", 0)
-        mq135 = payload.get("mq135_raw", 0)
-        device_id = payload.get("device_id", 1) # Mặc định thiết bị có ID = 1
+        temp = payload.get("temperature")
+        hum = payload.get("humidity")
+        mq2 = payload.get("mq2_raw")
+        mq135 = payload.get("mq135_raw")
+        device_id = payload.get("device_id")
 
         device = Device.objects.filter(device_id=device_id).first()
         if not device:
@@ -58,7 +58,11 @@ def on_message(client, userdata, msg):
                 )
                 
                 # Bắn lệnh MQTT ngược lại ESP32 để kích hoạt Quạt hút/Còi
-                control_payload = {"fan_on": True, "siren_on": True}
+                control_payload = {
+                    "device_id": device.device_id,
+                    "command": "emergency_on"
+                }
+
                 client.publish("home/devices/control", json.dumps(control_payload))
                 
                 print("🚨 ĐÃ PHÁT CẢNH BÁO VÀ BẬT QUẠT HÚT KHẨN CẤP!")

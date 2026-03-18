@@ -16,11 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from iot_api.views import CustomLoginView, DeviceViewSet, SensorLogViewSet, HourlyChartAPIView
+from iot_api.views import CustomLoginView, DeviceViewSet, SensorLogViewSet, HourlyChartAPIView, RoomViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
+router.register(r'rooms', RoomViewSet, basename='room')
 router.register(r'devices', DeviceViewSet, basename='device')
 router.register(r'sensor-logs', SensorLogViewSet, basename='sensorlog')
 urlpatterns = [
